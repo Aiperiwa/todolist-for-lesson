@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { TodoList } from './components/todo-list'
 import { startTodolist } from './data'
+import styled, { ThemeProvider, createGlobalStyle } from 'styled-components'
+
+
+
 
 function App() {
   const [todos, setTodos] = useState(startTodolist)
@@ -28,18 +32,50 @@ function App() {
       }
     })
     setTodos(updatedTodos)
+
+   
   }
-  
+
+  const H1 = styled.h1`
+  text-decoration: underline;
+`
+const Global = createGlobalStyle`
+  body {
+    background-color: ${({ theme }) => theme.colors.bg};
+    
+  }
+  h2 {
+    background-color: #acf;
+    margin: 0;
+  }
+`
+
+const StyledTodolist = styled(TodoList)`
+  & h2 {
+    color: #ffc;
+  }
+  & ul {
+    background-color: #9fc!important;
+    }
+`
+
+const theme = {
+  colors: {
+    bg: '#444',
+    text: 'blue'
+  }
+}  
 
   return (
-    <div>
-      <h1>Todo List</h1>
+    <ThemeProvider theme={theme} >
+      <Global />
+      <H1>Todo List</H1>
       <TodoList
         title="Overdue"
         items={getOverdueTodos()}
         onToggleTodo={toggleTodo}
       />
-      <TodoList
+      <StyledTodolist
         title="Actual"
         items={getActualTodos()}
         onToggleTodo={toggleTodo}
@@ -51,7 +87,7 @@ function App() {
       />
 
     
-    </div>
+    </ThemeProvider>
   )
 }
 
